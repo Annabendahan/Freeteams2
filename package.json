@@ -2,7 +2,7 @@
   "name": "Freeteams2",
   "license": "MIT",
   "engines": {
-    "node": "8.9.4",
+    "node": "^6.14.0 || ^8.10.0 || >=9.10.0",
     "yarn": "1.6.0"
   },
   "scripts": {
