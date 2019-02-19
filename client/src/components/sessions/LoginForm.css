@@ -1,0 +1,33 @@
+.loginForm{
+background: #2ADFD4;
+text-align: center;
+padding: 20px;
+margin-top: -20px;
+height: 200vh;
+color: white;
+}
+
+
+
+.loginForm h1, .loginForm h2{
+  color: white;
+}
+
+
+.loginForm form{
+  margin-top: 100px;
+}
+
+
+.r-link{
+color: white;
+text-decoration: none;
+font-size: 12px;
+margin-top: 50px;
+}
+
+.r-link:hover{
+text-decoration: underline;
+}
+
+
