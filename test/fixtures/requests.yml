@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  team: one
+  user: one
+  text: MyText
+  status: MyString
+  answer: MyString
+
+two:
+  team: two
+  user: two
+  text: MyText
+  status: MyString
+  answer: MyString

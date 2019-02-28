@@ -3,8 +3,13 @@ import './App.css';
 import axios from 'axios'
 
 import {BrowserRouter as Router, Link, Redirect, Route} from 'react-router-dom';
-import CoursesContainer from './components/CoursesContainer';
+import TeamsContainer from './components/TeamsContainer';
+import Dashboard from './components/Dashboard';
+import FullTeam from './components/FullTeam';
+import Home from './components/Home';
+import AddTeamForm from './components/AddTeamForm';
 import Login from './components/sessions/Login'
+import NavigationItems from './components/navigation/NavigationItems'
 import RegisterForm from './components/sessions/RegisterForm'
 
 class App extends Component {
@@ -114,6 +119,8 @@ fetch('/api/user_token', {
   }
 
 
+
+
   render() {
 
 console.log(this.state.auth)
@@ -138,15 +145,37 @@ console.log(this.state.error)
     return (
       <Router>
       <div className="grey-container">
-        <header className="App-header">
-        </header>
+
         {logout}
+        <NavigationItems />
 <div className="error"> {errorLogin}  {errorRegister} </div>
-          <Route
-            exact path="/"
+
+
+
+
+
+           <Route
+        exact path="/"
+        render={() => <Home />}  />
+
+
+
+              <Route
+            exact path="/teams"
             render={() => (this.state.auth !== null)
-              ? < CoursesContainer />
+              ? < TeamsContainer />
               : <Redirect to="/login" /> } />
+
+             <Route
+            exact path="/dashboard"
+            render={() => (this.state.auth !== null)
+              ? < Dashboard />
+              : <Redirect to="/login" /> } />
+
+
+          <Route
+              exact path="/teams/:id"
+              render={() => <FullTeam/> } />
 
 
 

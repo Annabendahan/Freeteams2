@@ -1,0 +1,20 @@
+.items{
+display: flex;
+justify-content: space-between;
+width: 30%;
+float: right;
+}
+
+
+.item a{
+  text-decoration: none;
+}
+
+.item a:hover{
+  color: red;
+}
+
+
+.item:active{
+ color: red;
+}
