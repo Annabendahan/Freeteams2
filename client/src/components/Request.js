@@ -1,84 +1,62 @@
 import React, { Component } from 'react';
-import { MDBIcon } from "mdbreact";
-import jwt_decode from 'jwt-decode';
 import axios from 'axios';
-import update from 'immutability-helper';
+import { MDBIcon } from "mdbreact";
+import {BrowserRouter as  Router, Link, Route, Redirect} from 'react-router-dom';
+
+import './Request.css'
 
 
-class Request  extends Component {
+
+class Request extends Component {
   constructor(props) {
   super(props)
   this.state = {
-    answer: '',
-    status: '',
-
+    team: ''
   }
 }
 
 
 
-handleInput = (e) => {
-
-  this.setState({[e.target.name]: e.target.value})
-}
-
-
-answerHandler = (e) => {
-e.preventDefault();
-console.log(this)
-
+  componentDidMount = () =>{
   let token = "Bearer " + localStorage.getItem("jwt")
-  let decoded = jwt_decode(localStorage.getItem("jwt"))
-        const request = {
-       answer: this.state.answer,
-       status: this.state.status
-        };
 
-  axios.put(`/api/teams/${this.props.id}/requests/`,
-   { request: request
-    }, { headers: {'Authorization': token }}
-  )
+    const options = { method: 'GET',
+    headers: { 'content-type': 'application/x-www-form-urlencoded', 'Authorization': token },
+    url: `/api/teams/${this.props.team_id}`,
+     };
+    axios(options)
   .then(response => {
     console.log(response)
-    const requests = update(this.state.requests, {
-      $splice: [[0, 0, response.data]]
-    })
-    this.setState({
-      requests: requests,
-     })
-
-   //this.setState({ requests: response.data})
- })
+    this.setState({team: response.data.team})
+  })
   .catch(error => console.log(error))
 }
 
 
 
-updateRequest = (team) => {
-  return false;
-  const teamIndex = this.state.myTeams.findIndex(x=> x.id === team.id)
-  const myTeams = update(this.state.myTeams, {
-    [teamIndex]: {$set: team}
-  })
-  this.setState({myTeams: myTeams, notification: 'All changes saved !', editingCourseId: null})
-}
-
   render() {
 
 
+console.log(this.state.team.title)
+console.log(this.state.team.title)
+
+let team =    <Link to= {`/teams/${this.props.team_id}`}> <span>  {this.state.team.title} </span> </Link>
 
 
-  return(
-    <div>
-    REQUEST:
-       {this.props.text}
+ return(
+    <div className="request">
+      {this.props.text}
+       {this.props.answer}
+       {this.props.status}
 
 
-
-
+       <span> for team {team} </span>
     </div>
     )
-  }
 }
+}
+
+
+
 
 export default Request;

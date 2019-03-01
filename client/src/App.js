@@ -27,15 +27,13 @@ class App extends Component {
 
 
 
-handleRegisterSubmit = (event, email, password, password_confirmation) => {
+handleRegisterSubmit = (event, data) => {
   event.preventDefault()
-  const user = {
-    email: email,
-    password: password,
-    password_confirmation: password_confirmation
-  }
-  let request = {"auth": {"email": email, "password": password}}
-  console.log(request)
+  const user =
+    data
+
+  let request = {"auth": {"email": data.email, "password": data.password}}
+  console.log(data)
   console.log(user)
     axios.post(
     `/api/users`,
@@ -43,8 +41,11 @@ handleRegisterSubmit = (event, email, password, password_confirmation) => {
       user: user
     })
   .then(response => {
+    console.log(response)
     this.setState({errorRegister: false})
-    this.handleLoginSubmit(event, email, password)
+    this.handleLoginSubmit(event, user.email, user.password)
+    console.log( data.email)
+    console.log(user.email)
   })
   .catch(error =>
     console.log(error),

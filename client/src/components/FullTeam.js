@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {BrowserRouter as  Router, Link, Route, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import Request from './Request'
+import RequestForm from './RequestForm'
 import jwt_decode from 'jwt-decode';
 import update from 'immutability-helper';
 import './FullTeam.css'
@@ -17,7 +17,8 @@ class FullTeam extends Component {
       requests: [],
       text: '',
       answer: ' ',
-      status: 'Pending'
+      status: 'Pending',
+      notification: ''
      }
    }
 
@@ -68,6 +69,7 @@ e.preventDefault();
   let decoded = jwt_decode(localStorage.getItem("jwt"))
         const request = {
        text: this.state.text,
+       status: this.state.status,
         user_id: decoded.sub,
         team_id: this.props.match.params.id
         };
@@ -82,7 +84,7 @@ e.preventDefault();
       $splice: [[0, 0, response.data]]
     })
     this.setState({
-      requests: requests,
+      requests: requests,  notification: 'Thank you for your request!', text: ''
      })
 
    //this.setState({ requests: response.data})
@@ -91,17 +93,43 @@ e.preventDefault();
 }
 
 
-updateRequest = (request) => {
-
-  request.answer = this.state.answer
-  console.log(request)
+updateRequest = (team) => {
   return false;
-  const requestIndex = this.state.requests.findIndex(x=> x.id === request.id)
-  const requests = update(this.state.requests, {
-    [requestIndex]: {$set: request}
+  const teamIndex = this.state.myTeams.findIndex(x=> x.id === team.id)
+  const myTeams = update(this.state.myTeams, {
+    [teamIndex]: {$set: team}
   })
-  this.setState({requests: requests})
+  this.setState({myTeams: myTeams, notification: 'All changes saved !', editingCourseId: null})
 }
+
+
+
+answerRequest= (e, data) => {
+e.preventDefault();
+console.log(data)
+
+  let token = "Bearer " + localStorage.getItem("jwt")
+  let decoded = jwt_decode(localStorage.getItem("jwt"))
+
+
+  axios.put(`/api/teams/${this.props.match.params.id}/requests/`,
+   { request: data
+    }, { headers: {'Authorization': token }}
+  )
+  .then(response => {
+    console.log(response)
+    const requests = update(this.state.requests, {
+      $splice: [[0, 0, response.data]]
+    })
+    this.setState({
+      requests: requests,
+     })
+
+   this.setState({ notification: 'Thank you for your request!'})
+ })
+  .catch(error => console.log(error))
+}
+
 
 
 handleInput = (e) => {
@@ -115,6 +143,7 @@ render () {
   console.log(this.props)
 
   let decoded = jwt_decode(localStorage.getItem("jwt"))
+  let notification = this.state.notification
 
 
 
@@ -127,18 +156,13 @@ render () {
 
     requests = this.state.requests.map((r) =>{
     return ( <div key={r.id} >
-      <Request
+      <RequestForm
         text= {r.text}
         answer={r.answer}
         id={r.id}
-        //updateRequest={() => this.updateRequest(r)}
+        user_id ={r.user_id}
+        answerRequest={this.answerRequest}
         />
-        <input className="answer" name="answer" type='text' placeholder= 'Your answer'
-            onChange={this.handleInput} value={this.state.answer} />
-         <input className="answer" name="status" type='text' placeholder= 'Status'
-            onChange={this.handleInput} value={this.state.status} />
-        <button  onClick={() => this.updateRequest(r)} className="modif" > OK </button>
-
         </div>
         )
        })
@@ -152,6 +176,7 @@ render () {
 
   return(
     <div class="FullTeam">
+    {notification}
     <h1> FullTeam </h1>
     <h3> {this.state.team.title} </h3>
     <p> {this.state.team.description} </p>

@@ -3,6 +3,8 @@ import axios from 'axios';
 import MyTeam from './MyTeam';
 import { MDBIcon } from "mdbreact";
 import AddTeamForm from './AddTeamForm';
+import Request from './Request'
+import './Dashboard.css'
 import {BrowserRouter as  Router, Link, Route, Redirect} from 'react-router-dom';
 
 
@@ -21,7 +23,9 @@ class Dashboard extends Component {
     notification: null,
     greetings: false,
     todo: true,
-    requests: []
+    requests: [],
+    myR: [],
+    display: 'myTeams'
 
   }
 }
@@ -39,6 +43,19 @@ class Dashboard extends Component {
   .then(response => {
     console.log(response)
     this.setState({myTeams: response.data})
+  })
+  .catch(error => console.log(error))
+
+
+
+  const options2 = { method: 'GET',
+    headers: { 'content-type': 'application/x-www-form-urlencoded', 'Authorization': token },
+    url: '/api/my_requests',
+     };
+    axios(options2)
+  .then(response => {
+    console.log(response)
+    this.setState({myR: response.data})
   })
   .catch(error => console.log(error))
 }
@@ -101,6 +118,20 @@ updateTeam = (team) => {
 }
 
 
+displayMyRequests = () => {
+        this.setState({ display: 'myRequests'})
+      }
+
+      displayMyTeams = () => {
+        this.setState({ display: 'myTeams'})
+      }
+
+
+      displayMyProfile = () => {
+        this.setState({ display: 'myProfile'})
+      }
+
+
 
 enableEditing = (id) => {
 
@@ -118,13 +149,34 @@ render() {
   let email = decoded.email
   let username = decoded.username
   let age = decoded.age
+  let description = decoded.description
+  let websitelink = decoded.websitelink
+
+  let Profile = <div className= "Profile">
+                  <p> {email} </p>
+                  <p> {username} </p>
+                  <p> {age} </p>
+                  <p> {description} </p>
+                  <p> {websitelink} </p>
+                </div>
 
 
+
+let myR = this.state.myR.map((m) => {
+  return(
+    <div key={m.id}>
+    <Request
+    text={m.text}
+    team_id={m.team_id}
+    />
+    </div>
+    )
+})
 
   let myTeams = this.state.myTeams.map((t) => {
     if (this.state.editingTeamId === t.id) {
       return(
-        <div key={t.id} >
+        <div key={t.id} className="team" >
           < AddTeamForm
           team={t}
           key={t.id}
@@ -133,38 +185,59 @@ render() {
           )
     } else {
      return(
-        <div key={t.id} >
-        <Link to= {`/teams/${t.id}`}> See </Link>
+        <div key={t.id} className="team" >
           < MyTeam
           title={t.title} category={t.category} description={t.description}
           capacity ={t.capacity} location={t.location}
           clicked={() => this.enableEditing(t.id)}
           erase={() => this.deleteHandler(t.id)} />
+           <Link to= {`/teams/${t.id}`}> See </Link>
           </div>
           )}
         });
 
+
+
+
+        let tabs = ''
+        let toDisplay = myR
+        if (this.state.display === "myRequests") {
+      toDisplay = myR
+      tabs= <div className= "tabs">
+        <span className="tab active" onClick={this.displayMyRequests}> My Requests </span>
+        <span className="tab" onClick={this.displayMyTeams}> My Teams </span>
+        <span className="tab " onClick={this.displayMyProfile}> My Profile </span>
+      </div>
+     } else if (this.state.display === "myTeams") {
+      toDisplay = myTeams
+      tabs = <div className= "tabs">
+        <span className="tab " onClick={this.displayMyRequests}> My Requests </span>
+        <span className="tab active" onClick={this.displayMyTeams}> My Teams </span>
+        <span className="tab " onClick={this.displayMyProfile}> My Profile </span>
+      </div>
+     } else if (this.state.display === "myProfile") {
+      toDisplay = Profile
+      tabs = <div className= "tabs">
+        <span className="tab " onClick={this.displayMyRequests}> My Requests </span>
+        <span className="tab " onClick={this.displayMyTeams}> My Teams </span>
+        <span className="tab active" onClick={this.displayMyProfile}> My Profile </span>
+        </div>
+     }
+
+
+
+
+
+
   return (
     <div>
     <h1> Dashboard </h1>
-
-
      <button className="newCourseButton" onClick={this.addNewTeam} >
-         ADD A TASK <MDBIcon icon="plus"/>
+         CREATE A NEW TEAM <MDBIcon icon="plus"/>
       </button>
 
-
-      <h2> My Requests </h2>
-
-      <h2> My Teams  </h2>
-      {myTeams}
-
-      <h2> Profile </h2>
-      <p> {email} </p>
-      <p> {username} </p>
-      {age} ans
-
-
+      {tabs}
+      <div className="toDisplay" > {toDisplay} </div>
 
    </div>
     )

@@ -25,7 +25,7 @@ handleBlur = () => {
   const team = {
     title: this.state.title,
     description: this.state.description,
-    location: this.props.team.location,
+    location: this.state.location,
     capacity: this.state.capacity,
 
 
@@ -72,9 +72,34 @@ render() {
               value={this.state.title} onChange={(e) => this.handleInput(e)} /> </p>
 
 
-              <p> <input className='input' type="text"
-              name="location" placeholder='Location'
-              value={this.state.location} onChange={(e) => this.handleInput(e)} /> </p>
+
+        <label>
+          Quartier:
+          <select name= "location" value={this.state.value} onChange={this.handleInput}>
+            <option value="Paris 1">Paris 1</option>
+            <option value="Paris 2">Paris 2</option>
+            <option value="Paris 3">Paris 3</option>
+            <option value="Paris 4">Paris 4</option>
+            <option value="Paris 5">Paris 5</option>
+            <option value="Paris 6">Paris 6</option>
+            <option value="Paris 7">Paris 7</option>
+            <option value="Paris 8">Paris 8</option>
+            <option value="Paris 9">Paris 9</option>
+            <option value="Paris 10">Paris 10</option>
+            <option value="Paris 11">Paris 11</option>
+            <option value="Paris 12">Paris 12</option>
+            <option value="Paris 13">Paris 13</option>
+            <option value="Paris 14">Paris 14</option>
+            <option value="Paris 15">Paris 15</option>
+            <option value="Paris 16">Paris 16</option>
+            <option value="Paris 17">Paris 17</option>
+            <option value="Paris 18">Paris 18</option>
+            <option value="Paris 19">Paris 19</option>
+            <option value="Paris 20">Paris 20</option>
+          </select>
+        </label>
+        <input type="submit" value="Submit" />
+
 
 
             <p> <textarea className='input' name="description"

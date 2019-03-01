@@ -6,15 +6,11 @@ import './Team.css'
 const Team = (props) => {
 
   return(
-    <div className="team">
+    <div >
       <h3> {props.title} </h3>
       <p> {props.description} </p>
       <p> {props.capacity} </p>
       <p> {props.location} </p>
-
-
-
-
     </div>
     )
 }

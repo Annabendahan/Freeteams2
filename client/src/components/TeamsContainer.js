@@ -6,6 +6,7 @@ import {BrowserRouter as  Router, Link, Route, Redirect} from 'react-router-dom'
 import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import update from 'immutability-helper';
+import './TeamsContainer.css'
 
 
 
@@ -60,7 +61,7 @@ render() {
   if (this.state.search === '') {
 
   teams = this.state.teams.map((t) => {
-     return( <div key={t.id} >
+     return( <div key={t.id} className="team">
 
           < Team
           title={t.title} category={t.category} description={t.description}
@@ -78,7 +79,7 @@ render() {
           if (t.title.toLowerCase().includes(this.state.search.toLowerCase())
               || t.description.toLowerCase().includes(this.state.search.toLowerCase())) {
 
-          return( <div key={t.id} >
+          return( <div key={t.id} className="team" >
 
           < Team
           title={t.title} category={t.category} description={t.description}
@@ -97,7 +98,7 @@ render() {
 
 
   return (
-    <div>
+    <div className="teams">
     <h1> Teams </h1>
     <MDBIcon icon="search" className="search-i"/>
     <input className="search" name="search" type='text' placeholder= 'Title, Director name...'

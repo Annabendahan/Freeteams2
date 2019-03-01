@@ -11,8 +11,8 @@ class DashboardController < ApiController
 
 
   def my_requests
-    @requests = Request.where(user: current_user)
-
+    requests = Request.where(user: current_user)
+    render json: requests
   end
 
 end

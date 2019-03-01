@@ -12,6 +12,10 @@ class RegisterForm extends Component {
       email: '',
       password: '',
       password_confirmation: '',
+      username: '',
+      age: 20,
+      description: '',
+      websitelink: ''
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -83,7 +87,9 @@ fetch('/api/user_token', {
          <h1> TODOLIST </h1>
         <h2> GET THINGS DONE </h2>
        <form className="form" onSubmit={(event) =>
-        this.props.handleRegisterSubmit(event, this.state.email, this.state.password, this.state.password_confirmation)}>
+        this.props.handleRegisterSubmit(
+          event,
+          this.state)}>
 
         <br />
         <input
@@ -95,6 +101,18 @@ fetch('/api/user_token', {
           onChange={(event) => this.handleChange(event)}
         />
         <br /> <br />
+        <br />
+        <input
+          name="username"
+          placeholder="username"
+          id="username"
+          type="username"
+          value={this.state.username}
+          onChange={(event) => this.handleChange(event)}
+        />
+        <br /> <br />
+        <input name="age" type='number' placeholder='Age'
+            max={110} min={10} onChange={(event) => this.handleChange(event)} value={this.state.age} />
         <br />
         <input
           name="password"
@@ -115,6 +133,25 @@ fetch('/api/user_token', {
           onChange={(event) => this.handleChange(event)}
           />
         <br /><br /><br /> <br />
+        <input
+          name="description"
+          placeholder="description"
+          id="description"
+          type="text"
+          value={this.state.description}
+          onChange={(event) => this.handleChange(event)}
+        />
+        <br /><br /><br /> <br />
+        <input
+          name="websitelink"
+          placeholder="websitelink"
+          id="websitelink"
+          type="websitelink"
+          value={this.state.websitelink}
+          onChange={(event) => this.handleChange(event)}
+        />
+        <br /> <br />
+        <br />
        <input className="submit" type="submit" value="REGISTER" />
           <br />
 

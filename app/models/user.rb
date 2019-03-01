@@ -8,7 +8,9 @@ class User < ApplicationRecord
             sub: id,
             email: email,
             username: username,
-            age: age
+            age: age,
+            description: description,
+            websitelink: websitelink
         }
     end
 end
